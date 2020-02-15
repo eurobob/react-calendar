@@ -43,11 +43,14 @@ export default class Calendar extends Component {
           'Calendar-grid-item',
           day.isSame(moment(), 'day') && 'Calendar-grid-item--current',
           day.isSame(selectedDay, 'day') && 'Calendar-grid-item--selected',
+          day.isBefore(moment(), 'day') && 'prevMonth',
           classNames
         )}
         onClick={() => {
-          setSelectedDay(day);
-          onPickDate(day);
+          if (!day.isBefore(moment(), 'day')) {
+            setSelectedDay(day);
+            onPickDate(moment(day));
+          }
         }}
       >
         {day.format('D')}
