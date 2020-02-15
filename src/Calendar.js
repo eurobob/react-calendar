@@ -30,15 +30,25 @@ export default class Calendar extends Component {
 
   static defaultProps = {
     weekOffset: 0,
-    renderDay: ({ day, classNames, onPickDate }) => (
+    renderDay: ({
+      day,
+      selectedDay,
+      setSelectedDay,
+      classNames,
+      onPickDate
+    }) => (
       <div
         key={day.format()}
         className={cx(
           'Calendar-grid-item',
           day.isSame(moment(), 'day') && 'Calendar-grid-item--current',
+          day.isSame(selectedDay, 'day') && 'Calendar-grid-item--selected',
           classNames
         )}
-        onClick={e => onPickDate(day)}
+        onClick={() => {
+          setSelectedDay(day);
+          onPickDate(day);
+        }}
       >
         {day.format('D')}
       </div>
@@ -53,6 +63,13 @@ export default class Calendar extends Component {
       </div>
     )
   };
+
+  constructor() {
+    super();
+    this.state = {
+      selectedDay: moment()
+    };
+  }
 
   handleNextMonth = () => {
     if (this.props.onNextMonth) {
@@ -70,6 +87,10 @@ export default class Calendar extends Component {
     this.props.onChangeMonth(this.props.date.clone().subtract(1, 'months'));
   };
 
+  setSelectedDay = selectedDay => {
+    this.setState({ selectedDay });
+  };
+
   render() {
     const {
       date,
@@ -81,6 +102,9 @@ export default class Calendar extends Component {
       containerClassName
     } = this.props;
 
+    const { selectedDay } = this.state;
+    const { setSelectedDay } = this;
+
     return (
       <div className={cx('Calendar', containerClassName)}>
         {renderHeader({
@@ -90,7 +114,7 @@ export default class Calendar extends Component {
         })}
         <div className={cx('Calendar-grid', contentClassName)}>
           {createDateObjects(date, weekOffset).map((day, i) =>
-            renderDay({ ...day, onPickDate })
+            renderDay({ ...day, selectedDay, onPickDate, setSelectedDay })
           )}
         </div>
       </div>
