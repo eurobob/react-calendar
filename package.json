@@ -13,7 +13,11 @@
     "build": "babel src --ignore __tests__ --out-dir lib",
     "lint": "eslint src --ignore-path .gitignore",
     "test": "jest",
-    "prepublish": "yarn run build"
+    "prepublish": "yarn run build",
+    "watch": "npm-watch"
+  },
+  "watch": {
+    "build": "src/*.js"
   },
   "author": "Hanse",
   "license": "MIT",
@@ -50,8 +54,9 @@
   },
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
-    "classnames": "^2.2.5",
+    "classnames": "^2.2.6",
     "moment": "^2.19.1",
+    "npm-watch": "^0.6.0",
     "prop-types": "^15.7.2"
   },
   "eslintConfig": {
