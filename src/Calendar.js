@@ -41,6 +41,7 @@ export default class Calendar extends Component {
         key={day.format()}
         className={cx(
           'Calendar-grid-item',
+          day.isSame(selectedDay, 'week') && 'Calendar-grid-item--week',
           day.isSame(moment(), 'day') && 'Calendar-grid-item--current',
           day.isSame(selectedDay, 'day') && 'Calendar-grid-item--selected',
           day.isBefore(moment(), 'day') && 'prevMonth',
