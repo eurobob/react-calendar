@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import moment from 'moment';
-import PropTypes from 'prop-types';
-import cx from 'classnames';
-import createDateObjects from './createDateObjects';
+import React, { Component } from "react";
+import moment from "moment";
+import PropTypes from "prop-types";
+import cx from "classnames";
+import createDateObjects from "./createDateObjects";
 
 export default class Calendar extends Component {
   static propTypes = {
@@ -25,7 +25,7 @@ export default class Calendar extends Component {
     /** classname for div wrapping the whole calendar */
     containerClassName: PropTypes.string,
     /** classname for the div wrapping the grid */
-    contentClassName: PropTypes.string
+    contentClassName: PropTypes.string,
   };
 
   static defaultProps = {
@@ -35,43 +35,43 @@ export default class Calendar extends Component {
       selectedDay,
       setSelectedDay,
       classNames,
-      onPickDate
+      onPickDate,
     }) => (
       <div
         key={day.format()}
         className={cx(
-          'Calendar-grid-item',
-          day.isSame(selectedDay, 'week') && 'Calendar-grid-item--week',
-          day.isSame(moment(), 'day') && 'Calendar-grid-item--current',
-          day.isSame(selectedDay, 'day') && 'Calendar-grid-item--selected',
-          day.isBefore(moment(), 'day') && 'prevMonth',
-          classNames
+          "Calendar-grid-item",
+          day.isSame(selectedDay, "week") && "Calendar-grid-item--week",
+          day.isSame(moment(), "day") && "Calendar-grid-item--current",
+          day.isSame(selectedDay, "day") && "Calendar-grid-item--selected",
+          day.isBefore(moment(), "day") && "prevMonth",
+          classNames,
         )}
         onClick={() => {
-          if (!day.isBefore(moment(), 'day')) {
+          if (!day.isBefore(moment(), "day")) {
             setSelectedDay(day);
             onPickDate(moment(day));
           }
         }}
       >
-        {day.format('D')}
+        {day.format("D")}
       </div>
     ),
     renderHeader: ({ date, onPrevMonth, onNextMonth }) => (
       <div className="Calendar-header">
         <button onClick={onPrevMonth}>«</button>
         <div className="Calendar-header-currentDate">
-          {date.format('MMMM YYYY')}
+          {date.format("MMMM YYYY")}
         </div>
         <button onClick={onNextMonth}>»</button>
       </div>
-    )
+    ),
   };
 
   constructor() {
     super();
     this.state = {
-      selectedDay: moment()
+      selectedDay: moment(),
     };
   }
 
@@ -80,7 +80,7 @@ export default class Calendar extends Component {
       return this.props.onNextMonth();
     }
 
-    this.props.onChangeMonth(this.props.date.clone().add(1, 'months'));
+    this.props.onChangeMonth(this.props.date.clone().add(1, "months"));
   };
 
   handlePrevMonth = () => {
@@ -88,10 +88,10 @@ export default class Calendar extends Component {
       return this.props.onPrevMonth();
     }
 
-    this.props.onChangeMonth(this.props.date.clone().subtract(1, 'months'));
+    this.props.onChangeMonth(this.props.date.clone().subtract(1, "months"));
   };
 
-  setSelectedDay = selectedDay => {
+  setSelectedDay = (selectedDay) => {
     this.setState({ selectedDay });
   };
 
@@ -103,22 +103,22 @@ export default class Calendar extends Component {
       renderHeader,
       onPickDate,
       contentClassName,
-      containerClassName
+      containerClassName,
     } = this.props;
 
     const { selectedDay } = this.state;
     const { setSelectedDay } = this;
 
     return (
-      <div className={cx('Calendar', containerClassName)}>
+      <div className={cx("Calendar", containerClassName)}>
         {renderHeader({
           date,
           onPrevMonth: this.handlePrevMonth,
-          onNextMonth: this.handleNextMonth
+          onNextMonth: this.handleNextMonth,
         })}
-        <div className={cx('Calendar-grid', contentClassName)}>
+        <div className={cx("Calendar-grid", contentClassName)}>
           {createDateObjects(date, weekOffset).map((day, i) =>
-            renderDay({ ...day, selectedDay, onPickDate, setSelectedDay })
+            renderDay({ ...day, selectedDay, onPickDate, setSelectedDay }),
           )}
         </div>
       </div>
