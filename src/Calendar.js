@@ -31,6 +31,7 @@ export default class Calendar extends Component {
   static defaultProps = {
     weekOffset: 0,
     renderDay: ({
+      date,
       day,
       selectedDay,
       setSelectedDay,
@@ -41,7 +42,7 @@ export default class Calendar extends Component {
         key={day.format()}
         className={cx(
           "Calendar-grid-item",
-          day.isSame(selectedDay, "week") && "Calendar-grid-item--week",
+          day.isSame(date, "week") && "Calendar-grid-item--week",
           day.isSame(moment(), "day") && "Calendar-grid-item--current",
           day.isSame(selectedDay, "day") && "Calendar-grid-item--selected",
           day.isBefore(moment(), "day") && "prevMonth",
@@ -68,9 +69,10 @@ export default class Calendar extends Component {
     ),
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
+      date: moment(),
       selectedDay: moment(),
     };
   }
@@ -80,7 +82,11 @@ export default class Calendar extends Component {
       return this.props.onNextMonth();
     }
 
-    this.props.onChangeMonth(this.props.date.clone().add(1, "months"));
+    const newDate = this.state.date.clone().add(1, "months");
+
+    this.setState({ date: newDate });
+
+    this.props.onChangeMonth(newDate);
   };
 
   handlePrevMonth = () => {
@@ -88,7 +94,11 @@ export default class Calendar extends Component {
       return this.props.onPrevMonth();
     }
 
-    this.props.onChangeMonth(this.props.date.clone().subtract(1, "months"));
+    const newDate = this.state.date.clone().subtract(1, "months");
+
+    this.setState({ date: newDate });
+
+    this.props.onChangeMonth(newDate);
   };
 
   setSelectedDay = (selectedDay) => {
@@ -97,7 +107,6 @@ export default class Calendar extends Component {
 
   render() {
     const {
-      date,
       weekOffset,
       renderDay,
       renderHeader,
@@ -106,7 +115,7 @@ export default class Calendar extends Component {
       containerClassName,
     } = this.props;
 
-    const { selectedDay } = this.state;
+    const { date, selectedDay } = this.state;
     const { setSelectedDay } = this;
 
     return (
@@ -118,7 +127,13 @@ export default class Calendar extends Component {
         })}
         <div className={cx("Calendar-grid", contentClassName)}>
           {createDateObjects(date, weekOffset).map((day, i) =>
-            renderDay({ ...day, selectedDay, onPickDate, setSelectedDay }),
+            renderDay({
+              ...day,
+              selectedDay,
+              onPickDate,
+              setSelectedDay,
+              date,
+            }),
           )}
         </div>
       </div>
