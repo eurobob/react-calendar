@@ -71,14 +71,6 @@
       "prettier",
       "import"
     ],
-    "rules": {
-      "prettier/prettier": [
-        2,
-        {
-          "singleQuote": true
-        }
-      ]
-    },
     "env": {
       "browser": true,
       "jest": true
