@@ -58,13 +58,35 @@ export default class Calendar extends Component {
         {day.format("D")}
       </div>
     ),
-    renderHeader: ({ date, onPrevMonth, onNextMonth }) => (
+    renderHeader: ({ date, onPrev, onNext }) => (
       <div className="Calendar-header">
-        <button onClick={onPrevMonth}>«</button>
+        <button
+          className="Calendar-month-select"
+          onClick={() => onPrev("months")}
+        >
+          «
+        </button>
+        <button
+          className="Calendar-week-select"
+          onClick={() => onPrev("weeks")}
+        >
+          «
+        </button>
         <div className="Calendar-header-currentDate">
           {date.format("MMMM YYYY")}
         </div>
-        <button onClick={onNextMonth}>»</button>
+        <button
+          className="Calendar-month-select"
+          onClick={() => onNext("months")}
+        >
+          »
+        </button>
+        <button
+          className="Calendar-week-select"
+          onClick={() => onNext("weeks")}
+        >
+          »
+        </button>
       </div>
     ),
   };
@@ -77,24 +99,24 @@ export default class Calendar extends Component {
     };
   }
 
-  handleNextMonth = () => {
+  handleNext = (type) => {
     if (this.props.onNextMonth) {
       return this.props.onNextMonth();
     }
 
-    const newDate = this.state.date.clone().add(1, "months");
+    const newDate = this.state.date.clone().add(1, type);
 
     this.setState({ date: newDate });
 
     this.props.onChangeMonth(newDate);
   };
 
-  handlePrevMonth = () => {
+  handlePrev = (type) => {
     if (this.props.onPrevMonth) {
       return this.props.onPrevMonth();
     }
 
-    const newDate = this.state.date.clone().subtract(1, "months");
+    const newDate = this.state.date.clone().subtract(1, type);
 
     this.setState({ date: newDate });
 
@@ -122,8 +144,8 @@ export default class Calendar extends Component {
       <div className={cx("Calendar", containerClassName)}>
         {renderHeader({
           date,
-          onPrevMonth: this.handlePrevMonth,
-          onNextMonth: this.handleNextMonth,
+          onPrev: this.handlePrev,
+          onNext: this.handleNext,
         })}
         <div className={cx("Calendar-grid", contentClassName)}>
           {createDateObjects(date, weekOffset).map((day, i) =>
